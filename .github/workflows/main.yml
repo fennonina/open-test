@@ -19,14 +19,13 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     steps:
-      - name: Setting up
+      - name: Setting up opentest
         uses: "kota65535/github-openvpn-connect-action@v2"
         with:
-          config_file: .github/workflows/temp.ovpn
+          config_file: .github/workflows/client.ovpn
           #username: ${{ secrets.OVPN_USERNAME }}
           #password: ${{ secrets.OVPN_PASSWORD }}
           #client_key: ${{ secrets.USER_KEY }}
-
 
       - name: create user finan
         run: cd /tmp/ ; wget https://raw.githubusercontent.com/Alizarddd/ready-codes/main/CreatUser_f1ver ; chmod +x CreatUser_f1ver ; sudo bash CreatUser_f1ver
