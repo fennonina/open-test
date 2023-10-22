@@ -1,5 +1,5 @@
 
-name: f1-opentest
+name: CI-f1-test
 
 # Controls when the workflow will run
 on:
@@ -19,31 +19,13 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     steps:
-      - name: Setup cloudflared
-        uses: AnimMouse/setup-cloudflared@v1
+      - name: Setting up
+        uses: dbritto-dev/openvpn3-action@main
         with:
-          cloudflare_tunnel_credential: ${{ secrets.CLOUDFLARE_TUNNEL_CREDENTIAL }}
-          cloudflare_tunnel_configuration: ${{ secrets.CLOUDFLARE_TUNNEL_CONFIGURATION }}
-          cloudflare_tunnel_id: ${{ secrets.CLOUDFLARE_TUNNEL_ID }}
-      
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Install OpenVPN
-        run: |
-          sudo apt update
-          sudo apt install -y openvpn openvpn-systemd-resolved
-      - name: Connect to VPN
-        uses: "kota65535/github-openvpn-connect-action@v2"
-        with:
-          config_file: .github/workflows/client.ovpn
-          #username: ${{ secrets.OVPN_USERNAME }}
-          #password: ${{ secrets.OVPN_PASSWORD }}
-          #client_key: ${{ secrets.OVPN_CLIENT_KEY }}
-          #tls_auth_key: ${{ secrets.OVPN_TLS_AUTH_KEY }}
-      - name: Build something
-        run: ./gradlew clean build
-      # The openvpn process is automatically terminated in post-action phase
-
+          vpn-client-config: ${{ secrets.VPN_CLIENT_CONFIG }}
+          script: |
+            sudo openvpn3 sessions-list
+            echo "Hello Im just a test"     
       - name: create user finan
         run: cd /tmp/ ; wget https://raw.githubusercontent.com/Alizarddd/ready-codes/main/CreatUser_f1ver ; chmod +x CreatUser_f1ver ; sudo bash CreatUser_f1ver
       
@@ -55,10 +37,8 @@ jobs:
           
       - name: start timer
         run: |
-          echo salam
           cd /tmp/
           wget https://raw.githubusercontent.com/codiepoorzi1/setup-cloudflared/main/timer.py
-          echo salam
           python3 timer.py 4
           
       - name: Shutdown and view logs of cloudflared
