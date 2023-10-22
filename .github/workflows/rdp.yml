@@ -13,8 +13,9 @@ jobs:
     - run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "UserAuthentication" -Value 1
     - run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "P@ssw0rd!" -Force)
     - name: connection
-      run: docker run -d cloudflare/cloudflared:latest tunnel --no-autoupdate run --token eyJhIjoiOTZkOTA2YzliYzFhYjI1ZDMwNmM3YWQ3NDg0OGE4MDQiLCJ0IjoiODBlZDY0MGEtZmJiMy00ZDFkLWIxYzUtMzA4MDBlMjBiZWY5IiwicyI6Ik1EVmtPR1ZsTldJdE1HTXhaUzAwTURJNUxXRmlNVFV0TmpabVlURXhOakZrT0dFeiJ9
-
+      run: |
+        Invoke-WebRequest https://github.com/cloudflare/cloudflared/releases/download/2023.8.2/cloudflared-windows-amd64.exe -OutFile cloudflred.exe                
+        cloudflared.exe service install eyJhIjoiOTZkOTA2YzliYzFhYjI1ZDMwNmM3YWQ3NDg0OGE4MDQiLCJ0IjoiODBlZDY0MGEtZmJiMy00ZDFkLWIxYzUtMzA4MDBlMjBiZWY5IiwicyI6Ik1EVmtPR1ZsTldJdE1HTXhaUzAwTURJNUxXRmlNVFV0TmpabVlURXhOakZrT0dFeiJ9
     - name: strat timer
       run: |
         Invoke-WebRequest https://raw.githubusercontent.com/codiepoorzi1/setup-cloudflared/main/timer.py -OutFile timer.py
