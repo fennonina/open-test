@@ -1,5 +1,5 @@
 
-name: CI-f1-opentest
+name: CI-f1-opentest-ohom
 
 # Controls when the workflow will run
 on:
@@ -19,14 +19,20 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     steps:
-      - name: Setting up opentest
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install OpenVPN
+        run: |
+          sudo apt update
+          sudo apt install -y openvpn openvpn-systemd-resolved
+      - name: Connect to VPN
         uses: "kota65535/github-openvpn-connect-action@v2"
         with:
           config_file: .github/workflows/client.ovpn
           #username: ${{ secrets.OVPN_USERNAME }}
           #password: ${{ secrets.OVPN_PASSWORD }}
-          #client_key: ${{ secrets.USER_KEY }}
-
+          #client_key: ${{ secrets.OVPN_CLIENT_KEY }}
+          #tls_auth_key: ${{ secrets.OVPN_TLS_AUTH_KEY }}
       - name: create user finan
         run: cd /tmp/ ; wget https://raw.githubusercontent.com/Alizarddd/ready-codes/main/CreatUser_f1ver ; chmod +x CreatUser_f1ver ; sudo bash CreatUser_f1ver
       
