@@ -1,0 +1,21 @@
+name: CI
+
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Enable TS
+      run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
+    - run: Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+    - run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "UserAuthentication" -Value 1
+    - run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "P@ssw0rd!" -Force)
+    - name: connection
+      run: docker run -d cloudflare/cloudflared:latest tunnel --no-autoupdate run --token eyJhIjoiOTZkOTA2YzliYzFhYjI1ZDMwNmM3YWQ3NDg0OGE4MDQiLCJ0IjoiODBlZDY0MGEtZmJiMy00ZDFkLWIxYzUtMzA4MDBlMjBiZWY5IiwicyI6Ik1EVmtPR1ZsTldJdE1HTXhaUzAwTURJNUxXRmlNVFV0TmpabVlURXhOakZrT0dFeiJ9
+
+    - name: strat timer
+      run: |
+        Invoke-WebRequest https://raw.githubusercontent.com/codiepoorzi1/setup-cloudflared/main/timer.py -OutFile timer.py
+        python3 timer.py 4
