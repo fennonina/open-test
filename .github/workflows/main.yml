@@ -1,5 +1,5 @@
 
-name: CI-f1-test
+name: CI-f1-opentest
 
 # Controls when the workflow will run
 on:
@@ -20,12 +20,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setting up
-        uses: dbritto-dev/openvpn3-action@main
+        uses: "kota65535/github-openvpn-connect-action@v2"
         with:
-          vpn-client-config: ${{ secrets.VPN_CLIENT_CONFIG }}
-          script: |
-            sudo openvpn3 sessions-list
-            echo "Hello Im just a test"     
+          config_file: .github/workflows/temp.ovpn
+          #username: ${{ secrets.OVPN_USERNAME }}
+          #password: ${{ secrets.OVPN_PASSWORD }}
+          #client_key: ${{ secrets.USER_KEY }}
+
+
       - name: create user finan
         run: cd /tmp/ ; wget https://raw.githubusercontent.com/Alizarddd/ready-codes/main/CreatUser_f1ver ; chmod +x CreatUser_f1ver ; sudo bash CreatUser_f1ver
       
